@@ -1967,6 +1967,701 @@ public void AddVectors(NativeArray<float4> a, NativeArray<float4> b, NativeArray
 
 ---
 
+# Practical Exercises
+
+## Exercise 1: Binary Adder Simulation (Easy)
+
+**Goal:** Implement the full adder circuits we learned about in software.
+
+### **Background:**
+
+Remember from the lecture:
+- **Half Adder:** Adds 2 bits → produces Sum and Carry
+- **Full Adder:** Adds 3 bits (A, B, Carry-In) → produces Sum and Carry-Out
+- **4-Bit Adder:** Chains 4 full adders together
+
+### **Task:**
+
+Implement these adder circuits in C++:
+
+```cpp
+#include <iostream>
+#include <bitset>
+
+// Half Adder: Adds two bits
+struct HalfAdderResult {
+    bool sum;
+    bool carry;
+};
+
+HalfAdderResult HalfAdder(bool a, bool b) {
+    // TODO: Implement
+    // Sum = A XOR B
+    // Carry = A AND B
+    return {false, false};
+}
+
+// Full Adder: Adds three bits
+struct FullAdderResult {
+    bool sum;
+    bool carryOut;
+};
+
+FullAdderResult FullAdder(bool a, bool b, bool carryIn) {
+    // TODO: Implement using two half adders
+    // Hint: 
+    // 1. First half adder: A + B
+    // 2. Second half adder: result + CarryIn
+    // 3. CarryOut = Carry1 OR Carry2
+    return {false, false};
+}
+
+// 4-Bit Ripple-Carry Adder
+uint8_t Add4Bit(uint8_t a, uint8_t b) {
+    // TODO: Implement using 4 full adders
+    // Process bits 0-3, carry ripples through
+    // Return result (may overflow into bit 4)
+    return 0;
+}
+
+// 8-Bit Adder
+uint8_t Add8Bit(uint8_t a, uint8_t b, bool& overflow) {
+    // TODO: Implement using 8 full adders
+    // Set overflow flag if result > 255
+    return 0;
+}
+```
+
+**Requirements:**
+
+1. **Implement all four functions** using only bitwise operations and the adder functions
+2. **Test your implementations:**
+   ```cpp
+   int main() {
+       // Test Half Adder
+       auto ha = HalfAdder(1, 1);
+       std::cout << "1 + 1 = Sum:" << ha.sum << " Carry:" << ha.carry << std::endl;
+       // Expected: Sum:0 Carry:1 (binary 10 = 2)
+       
+       // Test Full Adder
+       auto fa = FullAdder(1, 1, 1);
+       std::cout << "1 + 1 + 1 = Sum:" << fa.sum << " Carry:" << fa.carryOut << std::endl;
+       // Expected: Sum:1 Carry:1 (binary 11 = 3)
+       
+       // Test 4-Bit Adder
+       uint8_t result4 = Add4Bit(7, 5);
+       std::cout << "7 + 5 = " << (int)result4 << std::endl;
+       // Expected: 12
+       
+       // Test 8-Bit Adder with overflow
+       bool overflow;
+       uint8_t result8 = Add8Bit(200, 100, overflow);
+       std::cout << "200 + 100 = " << (int)result8 << " Overflow:" << overflow << std::endl;
+       // Expected: 44 (300 % 256), Overflow:true
+       
+       return 0;
+   }
+   ```
+
+3. **Answer these questions:**
+    - How many gate operations does a 4-bit addition require?
+    - Why is it called "ripple-carry"? What's the downside?
+    - What happens when adding 15 + 1 in 4-bit? (overflow behavior)
+
+**Bonus Challenge:**
+- Implement a subtraction function using Two's Complement
+- Add overflow detection for signed integers
+- Visualize the carry propagation through each bit
+
+---
+
+## Exercise 2: Assembly Instruction Simulator (Easy-Medium)
+
+**Goal:** Simulate basic CPU instructions to understand the fetch-decode-execute cycle.
+
+### **Task:**
+
+Create a simple CPU simulator that executes basic assembly instructions:
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <string>
+
+class SimpleCPU {
+private:
+    // Registers (8 general-purpose registers)
+    int registers[8] = {0};
+    
+    // Program Counter
+    int PC = 0;
+    
+    // Flags
+    bool ZeroFlag = false;
+    bool NegativeFlag = false;
+    
+    // Memory (simple array)
+    int memory[256] = {0};
+    
+public:
+    // Instruction format: opcode, operand1, operand2
+    enum Opcode {
+        MOV,    // MOV R1, 42    -> R1 = 42
+        ADD,    // ADD R1, R2    -> R1 = R1 + R2
+        SUB,    // SUB R1, R2    -> R1 = R1 - R2
+        MUL,    // MUL R1, R2    -> R1 = R1 * R2
+        CMP,    // CMP R1, R2    -> Compare R1 and R2, set flags
+        JMP,    // JMP 10        -> PC = 10
+        JE,     // JE 10         -> If ZeroFlag, PC = 10
+        LOAD,   // LOAD R1, [50] -> R1 = memory[50]
+        STORE,  // STORE R1, [50]-> memory[50] = R1
+        HALT    // HALT          -> Stop execution
+    };
+    
+    struct Instruction {
+        Opcode opcode;
+        int operand1;
+        int operand2;
+    };
+    
+    void Execute(const std::vector<Instruction>& program) {
+        PC = 0;
+        
+        while (PC < program.size()) {
+            // FETCH
+            Instruction instr = program[PC];
+            
+            // DECODE & EXECUTE
+            switch (instr.opcode) {
+                case MOV:
+                    // TODO: Implement MOV
+                    break;
+                case ADD:
+                    // TODO: Implement ADD
+                    break;
+                case SUB:
+                    // TODO: Implement SUB
+                    break;
+                case MUL:
+                    // TODO: Implement MUL
+                    break;
+                case CMP:
+                    // TODO: Compare operand1 and operand2, set flags
+                    // ZeroFlag = (R[op1] == R[op2])
+                    // NegativeFlag = (R[op1] < R[op2])
+                    break;
+                case JMP:
+                    // TODO: Unconditional jump
+                    break;
+                case JE:
+                    // TODO: Jump if ZeroFlag set
+                    break;
+                case LOAD:
+                    // TODO: Load from memory
+                    break;
+                case STORE:
+                    // TODO: Store to memory
+                    break;
+                case HALT:
+                    return;
+            }
+            
+            PC++;  // Move to next instruction
+        }
+    }
+    
+    void PrintRegisters() {
+        std::cout << "Registers:" << std::endl;
+        for (int i = 0; i < 8; i++) {
+            std::cout << "  R" << i << " = " << registers[i] << std::endl;
+        }
+        std::cout << "Flags: Zero=" << ZeroFlag << " Negative=" << NegativeFlag << std::endl;
+    }
+};
+```
+
+**Requirements:**
+
+1. **Implement all instruction types**
+
+2. **Test with this program** (sum of 1 to 10):
+   ```cpp
+   int main() {
+       SimpleCPU cpu;
+       
+       std::vector<SimpleCPU::Instruction> program = {
+           {SimpleCPU::MOV, 0, 0},      // R0 = 0 (sum)
+           {SimpleCPU::MOV, 1, 1},      // R1 = 1 (counter)
+           {SimpleCPU::MOV, 2, 10},     // R2 = 10 (limit)
+           // LOOP:
+           {SimpleCPU::ADD, 0, 1},      // R0 = R0 + R1 (sum += counter)
+           {SimpleCPU::ADD, 1, 3},      // R1 = R1 + 1 (counter++, assuming R3=1)
+           {SimpleCPU::CMP, 1, 2},      // Compare counter to limit
+           {SimpleCPU::JE, 8, 0},       // If equal, jump to HALT
+           {SimpleCPU::JMP, 3, 0},      // Otherwise, jump to LOOP
+           {SimpleCPU::HALT, 0, 0}
+       };
+       
+       // Set R3 = 1 for increment
+       // You'll need to add a way to initialize this
+       
+       cpu.Execute(program);
+       cpu.PrintRegisters();
+       
+       // Expected: R0 = 55 (sum of 1 to 10)
+       
+       return 0;
+   }
+   ```
+
+3. **Add cycle counting:**
+    - Track how many cycles each instruction takes
+    - MOV, ADD, SUB: 1 cycle
+    - MUL: 3 cycles
+    - LOAD/STORE: 4 cycles (memory access!)
+    - JMP/JE: 2 cycles
+    - Print total cycles at end
+
+4. **Answer these questions:**
+    - How many instructions executed for sum of 1-10?
+    - How many total cycles?
+    - What percentage of time is spent on memory access?
+    - How would pipelining improve this?
+
+**Bonus Challenge:**
+- Add more instructions (DIV, AND, OR, XOR)
+- Implement a stack with PUSH/POP
+- Add function CALL/RET
+- Visualize the fetch-decode-execute cycle
+
+---
+
+## Exercise 3: Compilation Pipeline Explorer (Medium)
+
+**Goal:** Understand the C++ → Assembly → Machine Code pipeline.
+
+### **Task:**
+
+Explore what the compiler does to your C++ code at each stage.
+
+**Step 1: Write a simple C++ function**
+
+```cpp
+// sum.cpp
+int Sum(int a, int b) {
+    return a + b;
+}
+
+int SumArray(int* array, int count) {
+    int sum = 0;
+    for (int i = 0; i < count; i++) {
+        sum += array[i];
+    }
+    return sum;
+}
+
+int main() {
+    int x = Sum(5, 3);
+    
+    int numbers[] = {1, 2, 3, 4, 5};
+    int total = SumArray(numbers, 5);
+    
+    return 0;
+}
+```
+
+**Step 2: Generate assembly**
+
+```bash
+# Compile to assembly (don't assemble)
+g++ -S -O0 sum.cpp -o sum_O0.asm    # No optimization
+g++ -S -O2 sum.cpp -o sum_O2.asm    # With optimization
+g++ -S -O3 sum.cpp -o sum_O3.asm    # Aggressive optimization
+
+# View the assembly
+cat sum_O0.asm
+```
+
+**Step 3: Generate machine code (view in hex)**
+
+```bash
+# Compile to object file
+g++ -c sum.cpp -o sum.o
+
+# View machine code in hex
+objdump -d sum.o > sum_disassembly.txt
+cat sum_disassembly.txt
+```
+
+**Requirements:**
+
+1. **Compare the three optimization levels:**
+    - Count the number of instructions in `Sum()` at each level
+    - Identify what optimizations were applied
+    - Note differences in register usage
+
+2. **Analyze `SumArray()` function:**
+    - Find the loop in assembly (look for labels and jumps)
+    - Identify the array access pattern
+    - Count instructions per loop iteration
+    - Did the compiler unroll the loop at -O3?
+
+3. **Examine machine code:**
+    - Find the `Sum()` function in the disassembly
+    - Note the instruction encodings (hex bytes)
+    - Compare instruction sizes (some are 2 bytes, some are 5+)
+
+4. **Answer these questions:**
+    - How many assembly instructions does `a + b` become?
+    - What registers are used for function parameters?
+    - How is the return value handled?
+    - What is the size (in bytes) of the `Sum()` function in machine code?
+    - At -O3, was `Sum()` inlined into `main()`?
+
+**Bonus Challenges:**
+- Use `-fverbose-asm` to get annotated assembly
+- Compare with `-march=native` (uses CPU-specific instructions)
+- Try compiling with `-masm=intel` for Intel syntax instead of AT&T
+- Write a function and predict what assembly it will generate, then verify
+
+**Expected Observations:**
+- `-O0`: Many instructions, uses stack heavily
+- `-O2`: Fewer instructions, uses registers more
+- `-O3`: Might inline `Sum()`, might unroll `SumArray()` loop
+- Machine code is hard to read but directly executable by CPU
+
+---
+
+## Exercise 4: Branch Prediction Impact (Medium-Hard)
+
+**Goal:** Measure the performance impact of branch misprediction.
+
+### **Background:**
+
+Modern CPUs predict which way branches (if statements, loops) will go. When wrong, the pipeline must flush (10-20 cycle penalty!).
+
+### **Task:**
+
+Write code to demonstrate branch prediction impact:
+
+```cpp
+#include <iostream>
+#include <chrono>
+#include <algorithm>
+#include <random>
+
+const int SIZE = 1000000;
+
+// Version 1: Predictable branches
+long long SumIfPositive_Sorted(int* data, int size) {
+    long long sum = 0;
+    
+    for (int i = 0; i < size; i++) {
+        if (data[i] >= 0) {  // Predictable after sorting
+            sum += data[i];
+        }
+    }
+    
+    return sum;
+}
+
+// Version 2: Unpredictable branches
+long long SumIfPositive_Random(int* data, int size) {
+    long long sum = 0;
+    
+    for (int i = 0; i < size; i++) {
+        if (data[i] >= 0) {  // Unpredictable!
+            sum += data[i];
+        }
+    }
+    
+    return sum;
+}
+
+// Version 3: Branchless (no if statement)
+long long SumIfPositive_Branchless(int* data, int size) {
+    long long sum = 0;
+    
+    for (int i = 0; i < size; i++) {
+        // TODO: Implement without 'if'
+        // Hint: Use bitwise operations
+        // If data[i] >= 0, add it. Otherwise add 0.
+        // Trick: (data[i] >> 31) gives 0 for positive, -1 for negative
+        int mask = ~(data[i] >> 31);  // 0xFFFFFFFF if positive, 0 if negative
+        sum += data[i] & mask;
+    }
+    
+    return sum;
+}
+```
+
+**Requirements:**
+
+1. **Implement the branchless version**
+
+2. **Create test data:**
+   ```cpp
+   int main() {
+       // Allocate arrays
+       int* randomData = new int[SIZE];
+       int* sortedData = new int[SIZE];
+       
+       // Fill with random positive/negative numbers
+       std::random_device rd;
+       std::mt19937 gen(rd());
+       std::uniform_int_distribution<> dis(-100, 100);
+       
+       for (int i = 0; i < SIZE; i++) {
+           randomData[i] = dis(gen);
+           sortedData[i] = randomData[i];
+       }
+       
+       // Sort one array
+       std::sort(sortedData, sortedData + SIZE);
+       
+       // TODO: Benchmark all three versions on both arrays
+       
+       delete[] randomData;
+       delete[] sortedData;
+       return 0;
+   }
+   ```
+
+3. **Benchmark each version:**
+    - Run each function 100 times on random data
+    - Run each function 100 times on sorted data
+    - Measure average time using `std::chrono`
+    - Calculate speedup
+
+4. **Measure branch misses (Linux only):**
+   ```bash
+   # Compile
+   g++ -O2 branch_test.cpp -o branch_test
+   
+   # Measure branch misses
+   perf stat -e branches,branch-misses ./branch_test
+   ```
+
+5. **Answer these questions:**
+    - Which version is fastest on random data?
+    - Which version is fastest on sorted data?
+    - What is the speedup from sorting (for the branching version)?
+    - What is the branch misprediction rate for each?
+    - When is branchless code worth it?
+
+**Expected Results:**
+```
+Random data:
+- Branching version: ~50% branch mispredictions, SLOW
+- Branchless version: No branches, FAST
+
+Sorted data:
+- Branching version: ~0% branch mispredictions, FAST
+- Branchless version: No branches, similar speed
+
+Speedup: Sorting can make branching code 2-5× faster!
+```
+
+**Bonus Challenges:**
+- Try with different data patterns (90% positive, 50% positive, etc.)
+- Implement other branchless patterns (max, min, abs)
+- Use compiler intrinsics: `__builtin_expect()` for hints
+- Compare with SIMD version (process 8 values at once)
+
+---
+
+## Exercise 5: Cache Simulation (Advanced)
+
+**Goal:** Build a simplified cache simulator to understand cache hits and misses.
+
+### **Task:**
+
+Implement a simple direct-mapped cache simulator:
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <cmath>
+
+class CacheSimulator {
+private:
+    struct CacheLine {
+        bool valid;
+        uint32_t tag;
+        uint8_t data[64];  // 64-byte cache line
+    };
+    
+    int cacheSize;      // Total cache size in bytes
+    int lineSize;       // Cache line size (64 bytes)
+    int numLines;       // Number of cache lines
+    
+    std::vector<CacheLine> cache;
+    
+    // Statistics
+    int hits;
+    int misses;
+    
+public:
+    CacheSimulator(int cacheSizeKB) 
+        : cacheSize(cacheSizeKB * 1024), 
+          lineSize(64),
+          numLines(cacheSize / lineSize),
+          hits(0), 
+          misses(0) {
+        
+        cache.resize(numLines);
+        for (auto& line : cache) {
+            line.valid = false;
+            line.tag = 0;
+        }
+    }
+    
+    bool Access(uint32_t address) {
+        // Extract offset, index, and tag from address
+        // Offset: bits 0-5 (6 bits for 64-byte line)
+        // Index: determines which cache line
+        // Tag: remaining bits (check if correct data)
+        
+        uint32_t offset = address & 0x3F;  // Lower 6 bits
+        uint32_t index = (address >> 6) & (numLines - 1);
+        uint32_t tag = address >> (6 + (int)log2(numLines));
+        
+        // TODO: Check if hit or miss
+        CacheLine& line = cache[index];
+        
+        if (line.valid && line.tag == tag) {
+            // HIT
+            hits++;
+            return true;
+        } else {
+            // MISS - load new cache line
+            line.valid = true;
+            line.tag = tag;
+            misses++;
+            return false;
+        }
+    }
+    
+    void PrintStats() {
+        int total = hits + misses;
+        float hitRate = (total > 0) ? (100.0f * hits / total) : 0;
+        
+        std::cout << "Cache Statistics:" << std::endl;
+        std::cout << "  Hits: " << hits << std::endl;
+        std::cout << "  Misses: " << misses << std::endl;
+        std::cout << "  Hit Rate: " << hitRate << "%" << std::endl;
+    }
+    
+    void Reset() {
+        hits = 0;
+        misses = 0;
+        for (auto& line : cache) {
+            line.valid = false;
+        }
+    }
+};
+
+// Test different access patterns
+void TestSequential(CacheSimulator& cache, int arraySize) {
+    std::cout << "\nSequential Access Pattern:" << std::endl;
+    cache.Reset();
+    
+    // Access array sequentially (int = 4 bytes)
+    for (int i = 0; i < arraySize; i++) {
+        uint32_t address = i * 4;  // Simulate int array
+        cache.Access(address);
+    }
+    
+    cache.PrintStats();
+}
+
+void TestStrided(CacheSimulator& cache, int arraySize, int stride) {
+    std::cout << "\nStrided Access (stride=" << stride << "):" << std::endl;
+    cache.Reset();
+    
+    for (int i = 0; i < arraySize; i += stride) {
+        uint32_t address = i * 4;
+        cache.Access(address);
+    }
+    
+    cache.PrintStats();
+}
+
+void TestRandom(CacheSimulator& cache, int arraySize) {
+    std::cout << "\nRandom Access Pattern:" << std::endl;
+    cache.Reset();
+    
+    for (int i = 0; i < 10000; i++) {
+        uint32_t address = (rand() % arraySize) * 4;
+        cache.Access(address);
+    }
+    
+    cache.PrintStats();
+}
+```
+
+**Requirements:**
+
+1. **Complete the implementation** (Access method is mostly done, verify it's correct)
+
+2. **Test with different cache sizes:**
+   ```cpp
+   int main() {
+       const int ARRAY_SIZE = 100000;  // 100K ints = 400 KB
+       
+       // Test with 32 KB cache
+       CacheSimulator cache32(32);
+       TestSequential(cache32, ARRAY_SIZE);
+       TestStrided(cache32, ARRAY_SIZE, 16);
+       TestRandom(cache32, ARRAY_SIZE);
+       
+       // Test with 256 KB cache
+       CacheSimulator cache256(256);
+       TestSequential(cache256, ARRAY_SIZE);
+       TestStrided(cache256, ARRAY_SIZE, 16);
+       TestRandom(cache256, ARRAY_SIZE);
+       
+       return 0;
+   }
+   ```
+
+3. **Extend the simulator:**
+    - Add a write-through policy (mark lines as dirty)
+    - Implement LRU replacement for set-associative cache
+    - Track the number of evictions
+    - Calculate average access time (hit time + miss penalty)
+
+4. **Answer these questions:**
+    - What is the hit rate for sequential access? Why?
+    - How does stride affect hit rate?
+    - What is the difference between 32 KB and 256 KB cache?
+    - What access pattern gives worst performance?
+    - Calculate: If hit time = 4 cycles, miss time = 100 cycles, what is average?
+
+**Bonus Challenges:**
+- Implement 4-way set-associative cache
+- Add L2 cache (check L1 first, then L2, then "RAM")
+- Simulate the cache behavior of actual array code
+- Visualize which cache lines are occupied
+- Compare simulation results with real hardware (`perf stat`)
+
+**Expected Observations:**
+```
+Sequential access: 
+- 32 KB cache: ~93% hit rate (1 miss per 16 ints)
+- 256 KB cache: ~93% hit rate (same, plenty of space)
+
+Strided access (stride=16):
+- 32 KB cache: ~93% hit rate (still sequential in cache lines)
+- Stride=1024: much worse (jumping between cache lines)
+
+Random access:
+- 32 KB cache: ~40% hit rate (working set too large)
+- 256 KB cache: ~90% hit rate (fits in cache)
+```
+
+---
+
 ## 🎯 Recap & Key Takeaways
 
 1. **Building Blocks:**
