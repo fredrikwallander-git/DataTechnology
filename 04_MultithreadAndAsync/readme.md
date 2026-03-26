@@ -1082,7 +1082,7 @@ worker.join();
 
 ---
 
-## Assignment
+## Exercise
 
 ## Parallel Sum
 

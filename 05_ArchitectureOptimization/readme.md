@@ -648,7 +648,7 @@ std::cout << "Frame time: " << frame_time << " ms\n";
 
 ---
 
-# Assignment: Pixelation Effect Shader
+# Exercise: Pixelation Effect Shader
 
 ## Goal
 Create a pixelation post-processing shader that makes the scene look like retro pixel art. Learn shader programming basics with immediate visual feedback.
@@ -664,7 +664,7 @@ Instead of rendering every pixel uniquely, we group pixels into blocks and give 
 
 ---
 
-## The Assignment
+## The Exercise
 
 You'll create a scene with colorful primitive objects (cubes, spheres, cylinders) and apply a pixelation shader that makes it look like old-school pixel art.
 
